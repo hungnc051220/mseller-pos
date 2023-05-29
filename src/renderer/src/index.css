@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: Product Sans, sans-serif;
+  }
+}
+
+@layer utilities {
+  .categories-container::-webkit-scrollbar {
+    @apply hidden;
+  }
+}
+
+@font-face {
+  font-family: "Product Sans";
+  font-weight: 400;
+  src: url("./assets/fonts/Product-Sans-Regular.otf");
+}
+
+@font-face {
+  font-family: "Product Sans";
+  font-weight: 700;
+  src: url("./assets/fonts/Product-Sans-Bold.otf");
+}
+
+/* .modal-style .ant-modal-content {
+  padding-bottom: 0 !important;
+  overflow: hidden;
+} */
+
+.table-row-light {
+  background-color: rgba(45, 184, 148, 0.05);
+}
+.table-row-dark {
+  background-color: #fff;
+}
+
+.otp-input-phone input {
+  border-width: 1px;
+}
+
+.ant-input-number-lg > .ant-input-number-input-wrap > .ant-input-number-input {
+  font-size: 16px !important;
+}
+
+.custom-select-form > .ant-form-item-row > .ant-form-item-control {
+  flex: 1 !important;
+}
+
+.swiper {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 25px;
+}
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 260px;
+  filter: blur(4px);
+  background: #d1ebff;
+}
+
+.swiper-slide-active {
+  filter: blur(0px);
+  background: #fff;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+}
+
+.swiper-3d .swiper-slide-shadow-left,
+.swiper-3d .swiper-slide-shadow-right {
+  background-image: none;
+}
+
+.custom-collapse > .ant-collapse-item {
+  border: 1px solid #FD9B30 !important;
+  border-radius: 8px !important;
+}
+
+.ant-table-thead > tr > th {
+  white-space: nowrap;
+}
+.item-bank .ant-form-item-row {
+  justify-content: center;
+}
+
+@media only screen and (min-width: 640px){
+  .swiper-slide {
+    width: 320px !important;
+  }
+}
