@@ -87,7 +87,7 @@ async function getProducts() {
 ipcMain.handle('products', getProducts)
 
 const printOptions = {
-  silent: false,
+  silent: true,
   printBackground: true,
   color: true,
   margin: {

@@ -378,8 +378,6 @@ const CreateAndUpdateOrder = ({ isEdit }) => {
       console.log("forwarding print request to the main process...");
 
       const data = target.contentWindow.document.documentElement.outerHTML;
-      console.log(data);
-      //console.log(data);
       const blob = new Blob([data], {type: "text/html;charset=UTF-8"});
       const url = URL.createObjectURL(blob);
 

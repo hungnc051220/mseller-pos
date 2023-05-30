@@ -12,13 +12,14 @@ import { createQrCode, createQrCodeStatic } from '../../../api'
 import { useState } from 'react'
 import { useEffect } from 'react'
 const { TextArea } = Input
-import QRCode from 'react-qr-code'
+import QRCode from 'react-qr-code';
+
 
 export const ContentPrint = ({ componentRef, order, qrCode }) => {
   const { user } = useSelector((state) => state.auth)
 
   return (
-    <div>
+    <div style={{display: "none"}}>
       <div
         ref={componentRef}
         style={{
@@ -26,7 +27,9 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          paddingBottom: '40px'
+          paddingBottom: '40px',
+          fontWeight: "500",
+          fontFamily: "'Product Sans', sans-serif"
         }}
       >
         <h3
@@ -102,7 +105,7 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
 
         <table style={{ marginTop: '0.25rem', width: '100%' }}>
           <thead
-            style={{ borderBottomWidth: '1px', borderColor: '#111827' }}
+            style={{ borderBottomWidth: '1px', borderColor: '#111827', borderStyle: "solid" }}
           >
             <tr>
               <th
