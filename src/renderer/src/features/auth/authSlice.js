@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = sessionStorage.getItem("user")
   ? JSON.parse(sessionStorage.getItem("user"))
-  : { user: null, accessToken: null, refreshToken: null };
+  : { user: null, accessToken: null, refreshToken: null, isMounted: false };
 
 const authSlice = createSlice({
   name: "auth",
@@ -13,6 +13,7 @@ const authSlice = createSlice({
       state.user = user;
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
+      state.isMounted = false;
       sessionStorage.setItem(
         "user",
         JSON.stringify({ user, accessToken, refreshToken })
@@ -22,12 +23,16 @@ const authSlice = createSlice({
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
+      state.isMounted = false;
       sessionStorage.removeItem("user");
     },
+    setMounted: (state) => {
+      state.isMounted = true;
+    }
   },
 });
 
-export const { setCredentials, logOut } = authSlice.actions;
+export const { setCredentials, logOut, setMounted } = authSlice.actions;
 
 export default authSlice.reducer;
 

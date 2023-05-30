@@ -18,6 +18,7 @@ import {
   NOTIFICATION_RECEIVED,
   TOKEN_UPDATED
 } from 'electron-push-receiver/src/constants'
+import { setMounted } from '../features/auth/authSlice'
 
 const AdminLayout = () => {
   const dispatch = useDispatch()
@@ -25,32 +26,44 @@ const AdminLayout = () => {
   const { data: dataWaiting } = useGetFoodWaitingQuery({})
   const [updateDevice] = useUpdateDeviceMutation()
   const user = useSelector((state) => state.auth.user)
+  const isMounted = useSelector((state) => state.auth.isMounted)
 
   useEffect(() => {
-    const onUpdateDevice = async (deviceToken) => {
-      try {
-        await updateDevice({ deviceToken, deviceType: 'WEB' })
-      } catch (error) {
-        console.log(error)
+    if (!isMounted) {
+      const onUpdateDevice = async (deviceToken) => {
+        try {
+          await updateDevice({ deviceToken, deviceType: 'WEB' })
+        } catch (error) {
+          console.log(error)
+        }
       }
+
+      // Listen for service successfully started
+      window.electron.ipcRenderer.on(NOTIFICATION_SERVICE_STARTED, (_, token) => {
+        console.log('service successfully started', token)
+        onUpdateDevice(token)
+      })
+
+      // Handle notification errors
+      window.electron.ipcRenderer.on(NOTIFICATION_SERVICE_ERROR, (_, error) => {
+        console.log('notification error', error)
+      })
+
+      // Send FCM token to backend
+      window.electron.ipcRenderer.on(TOKEN_UPDATED, (_, token) => {
+        console.log('token updated', token)
+      })
+
+      // Start service
+      const senderId = '380701649048' // <-- replace with FCM sender ID from FCM web admin under Settings->Cloud Messaging
+      console.log('starting service and registering a client')
+      window.electron.ipcRenderer.send(START_NOTIFICATION_SERVICE, senderId)
+
+      dispatch(setMounted())
     }
+  }, [isMounted])
 
-    // Listen for service successfully started
-    window.electron.ipcRenderer.on(NOTIFICATION_SERVICE_STARTED, (_, token) => {
-      console.log('service successfully started', token);
-      onUpdateDevice(token)
-    })
-
-    // Handle notification errors
-    window.electron.ipcRenderer.on(NOTIFICATION_SERVICE_ERROR, (_, error) => {
-      console.log('notification error', error)
-    })
-
-    // Send FCM token to backend
-    window.electron.ipcRenderer.on(TOKEN_UPDATED, (_, token) => {
-      console.log('token updated', token)
-    })
-
+  useEffect(() => {
     // Display notification
     window.electron.ipcRenderer.on(NOTIFICATION_RECEIVED, (_, serverNotificationPayload) => {
       // check to see if payload contains a body string, if it doesn't consider it a silent push
@@ -74,7 +87,6 @@ const AdminLayout = () => {
           setTimeout(() => dispatch(setStatusPayment(false)), 300)
         }
         toast.success(serverNotificationPayload?.notification?.body)
-        console.log('message from firebase', serverNotificationPayload)
         const result = store.dispatch(apiSlice.endpoints.getFloors.initiate({}))
         const result1 = store.dispatch(
           apiSlice.endpoints.getOrders.initiate({
@@ -110,126 +122,9 @@ const AdminLayout = () => {
       }
     })
 
-    // Start service
-    const senderId = '380701649048' // <-- replace with FCM sender ID from FCM web admin under Settings->Cloud Messaging
-    console.log('starting service and registering a client')
-    window.electron.ipcRenderer.send(START_NOTIFICATION_SERVICE, senderId)
-  }, [])
-
-  // useEffect(() => {
-  //   const onUpdateDevice = async (deviceToken) => {
-  //     try {
-  //       await updateDevice({ deviceToken, deviceType: "WEB" });
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   requestFirebaseNotificationPermission().then((token) => {
-  //     onUpdateDevice(token);
-  //   });
-  // }, []);
-
-  useEffect(() => {
-    onMessageListener()
-      .then((payload) => {
-        var message = JSON.parse(payload.data.content1)
-        if (message.type === 'order_updated') {
-          dispatch(setUpdate(true))
-          setTimeout(() => dispatch(setUpdate(false)), 300)
-        }
-        if (message.type === 'order_paid') {
-          dispatch(setStatusPayment(true))
-          setTimeout(() => dispatch(setStatusPayment(false)), 300)
-        }
-        if (message.type === 'payment_qr_static') {
-          dispatch(setStatusPayment(true))
-          setTimeout(() => dispatch(setStatusPayment(false)), 300)
-        }
-        toast.success(payload?.notification?.body)
-        console.log('message from firebase', payload)
-        const result = store.dispatch(apiSlice.endpoints.getFloors.initiate({}))
-        const result1 = store.dispatch(
-          apiSlice.endpoints.getOrders.initiate({
-            pageSize: 10000,
-            orderStatuses: ['WAITING'],
-            web: true
-          })
-        )
-        const result3 = store.dispatch(
-          apiSlice.endpoints.getOrders.initiate({
-            pageSize: 10000,
-            takeAway: true,
-            onTable: false,
-            orderStatuses: ['CREATED']
-          })
-        )
-        const result2 = store.dispatch(
-          apiSlice.endpoints.getNotifications.initiate({
-            pageSize: 20,
-            pageNumber: 0
-          })
-        )
-        result.refetch()
-        result1.refetch()
-        result2.refetch()
-        result3.refetch()
-        setNotification({
-          title: payload?.notification?.title,
-          body: payload?.notification?.body
-        })
-      })
-      .catch((err) => console.log('failed: ', err))
-  })
-
-  useEffect(() => {
-    const channel = new BroadcastChannel('notifications')
-    channel.addEventListener('message', (event) => {
-      var message = JSON.parse(event.data.data.content1)
-      if (message.type === 'order_updated') {
-        dispatch(setUpdate(true))
-        setTimeout(() => dispatch(setUpdate(false)), 300)
-      }
-      if (message.type === 'order_paid') {
-        dispatch(setStatusPayment(true))
-        setTimeout(() => dispatch(setStatusPayment(false)), 300)
-      }
-      if (message.type === 'payment_qr_static') {
-        dispatch(setStatusPayment(true))
-        setTimeout(() => dispatch(setStatusPayment(false)), 300)
-      }
-      toast.success(event.data?.notification?.body)
-      console.log('message from background', event.data)
-      const result = store.dispatch(apiSlice.endpoints.getFloors.initiate({}))
-      const result1 = store.dispatch(
-        apiSlice.endpoints.getOrders.initiate({
-          pageSize: 10000,
-          orderStatuses: ['WAITING'],
-          web: true
-        })
-      )
-      const result3 = store.dispatch(
-        apiSlice.endpoints.getOrders.initiate({
-          pageSize: 10000,
-          takeAway: true,
-          onTable: false,
-          orderStatuses: ['CREATED']
-        })
-      )
-      const result2 = store.dispatch(
-        apiSlice.endpoints.getNotifications.initiate({
-          pageSize: 20,
-          pageNumber: 0
-        })
-      )
-      result.refetch()
-      result1.refetch()
-      result2.refetch()
-      result3.refetch()
-      setNotification({
-        title: event.data?.notification?.title,
-        body: event.data?.notification?.body
-      })
-    })
+    return () => {
+      window.electron.ipcRenderer.removeAllListeners(NOTIFICATION_RECEIVED);
+    };
   }, [])
 
   return (

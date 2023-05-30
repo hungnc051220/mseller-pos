@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter, HashRouter } from "react-router-dom";
 import { StyleProvider } from "@ant-design/cssinjs";
 import { ConfigProvider } from "antd";
 import { ToastContainer } from "react-toastify";

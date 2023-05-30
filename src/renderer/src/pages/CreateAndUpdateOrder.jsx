@@ -372,6 +372,41 @@ const CreateAndUpdateOrder = ({ isEdit }) => {
     }
   }, [order]);
 
+
+  // Send print request to the Main process
+  const handleBillPrint = function (target) {
+    return new Promise(() => {
+      console.log("forwarding print request to the main process...");
+
+      const data = target.contentWindow.document.documentElement.outerHTML;
+      console.log(data);
+      //console.log(data);
+      const blob = new Blob([data], {type: "text/html;charset=UTF-8"});
+      const url = URL.createObjectURL(blob);
+
+      const printOptions = {
+        silent: true,
+        deviceName: "POS-80C",
+        printBackground: true,
+        color: true,
+        margin: {
+          marginType: 'printableArea'
+        },
+        landscape: false,
+        pagesPerSheet: 1,
+        collate: false,
+        copies: 1,
+        header: 'Page header',
+        footer: 'Page footer'
+      }
+
+      window.electronAPI.printComponent(url, printOptions, (response) => {
+        console.log("Main: ", response);
+      });
+      //console.log('Main: ', data);
+    });
+  };
+
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     onBeforeGetContent: () => {
@@ -384,6 +419,7 @@ const CreateAndUpdateOrder = ({ isEdit }) => {
       // Reset the Promise resolve so we can print again
       promiseResolveRef.current = null;
     },
+    print: handleBillPrint
   });
 
   return (

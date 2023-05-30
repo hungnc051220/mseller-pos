@@ -2,13 +2,18 @@ import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import { images } from "../constants";
 import { selectCurrentToken } from "../features/auth/authSlice";
+import { useEffect } from "react";
 
 const AuthLayout = () => {
   const token = useSelector(selectCurrentToken);
 
+  useEffect(() => {
+    window.Products.products().then(res => console.log(res));
+  }, [])
+
   return !token ? (
     <div className="flex min-h-screen">
-      <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+      <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           
           <Outlet />

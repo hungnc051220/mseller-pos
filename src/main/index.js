@@ -1,7 +1,7 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-const { setup: setupPushReceiver } = require('electron-push-receiver');
+const { setup: setupPushReceiver } = require('electron-push-receiver')
 import icon from '../../resources/icon.ico?asset'
 
 function createWindow() {
@@ -18,8 +18,8 @@ function createWindow() {
   })
 
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show();
-    mainWindow.maximize();
+    mainWindow.show()
+    mainWindow.maximize()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -35,7 +35,7 @@ function createWindow() {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
-  setupPushReceiver(mainWindow.webContents);
+  setupPushReceiver(mainWindow.webContents)
 }
 
 // This method will be called when Electron has finished
@@ -72,3 +72,64 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+//-------------------- print function -----------------
+
+// List of all options at -
+// https://www.electronjs.org/docs/latest/api/web-contents#contentsprintoptions-callback
+
+async function getProducts() {
+  const win = new BrowserWindow({ show: false })
+  const res = win.webContents.getPrintersAsync();
+  return res;
+}
+
+ipcMain.handle('products', getProducts)
+
+//handle print
+ipcMain.handle('printComponent', async (event, url, options) => {
+  const win = new BrowserWindow({ show: false })
+
+  win.webContents.on('did-finish-load', () => {
+    win.webContents.print(options, (success, failureReason) => {
+      console.log('Print Initiated in Main...')
+      if (!success) console.log(failureReason)
+    })
+  })
+
+  await win.loadURL(url)
+  return 'shown print dialog'
+})
+
+//handle preview
+// ipcMain.handle('previewComponent', async (event, url) => {
+//   let win = new BrowserWindow({
+//     title: 'Print Preview',
+//     show: false,
+//     autoHideMenuBar: true
+//   })
+
+//   win.webContents.once('did-finish-load', () => {
+//     win.webContents
+//       .printToPDF(printOptions)
+//       .then((data) => {
+//         const buf = Buffer.from(data)
+//         data = buf.toString('base64')
+//         const url = 'data:application/pdf;base64,' + data
+
+//         win.webContents.on('ready-to-show', () => {
+//           win.once('page-title-updated', (e) => e.preventDefault())
+//           win.show()
+//         })
+
+//         win.webContents.on('closed', () => (win = null))
+//         win.loadURL(url)
+//       })
+//       .catch((error) => {
+//         console.log(error)
+//       })
+//   })
+
+//   await win.loadURL(url)
+//   return 'shown preview window'
+// })
