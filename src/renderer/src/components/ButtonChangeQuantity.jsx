@@ -37,6 +37,7 @@ const ButtonChangeQuantity = ({ food }) => {
         min={0.1}
         controls={false}
         className="w-16 text-center"
+        maxLength={4}
         onChange={(value) => onChangeQuantity(value, food)}
       />
       <Button

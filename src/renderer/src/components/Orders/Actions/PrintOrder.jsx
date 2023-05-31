@@ -12,14 +12,13 @@ import { createQrCode, createQrCodeStatic } from '../../../api'
 import { useState } from 'react'
 import { useEffect } from 'react'
 const { TextArea } = Input
-import QRCode from 'react-qr-code';
-
+import QRCode from 'react-qr-code'
 
 export const ContentPrint = ({ componentRef, order, qrCode }) => {
   const { user } = useSelector((state) => state.auth)
 
   return (
-    <div style={{display: "none"}}>
+    <div style={{ display: 'none' }}>
       <div
         ref={componentRef}
         style={{
@@ -28,17 +27,17 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
           flexDirection: 'column',
           justifyContent: 'center',
           paddingBottom: '40px',
-          fontWeight: "500",
+          fontWeight: '500',
           fontFamily: "'Product Sans', sans-serif"
         }}
       >
-        <h3
-          style={{ textAlign: 'center', fontSize: '18px', fontWeight: 700, margin: 0 }}
-        >
+        <h3 style={{ textAlign: 'center', fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>
           {user?.company?.companyName}
         </h3>
-        <p style={{ textAlign: 'center', fontSize: '12px', margin: 0 }}>Địa chỉ:</p>
-        <p style={{ textAlign: 'center', fontSize: '12px', margin: 0 }}>Hotline: {user?.phoneNumber}</p>
+        <p style={{ textAlign: 'center', fontSize: '12px', marginBottom: '4px' }}>Địa chỉ:</p>
+        <p style={{ textAlign: 'center', fontSize: '12px', marginBottom: '4px' }}>
+          Hotline: {user?.phoneNumber}
+        </p>
 
         <h4
           style={{
@@ -54,9 +53,7 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
 
         <div className="space-y-[2px] pb-2" style={{ paddingBottom: '8px' }}>
           <div style={{ display: 'flex', width: '100%' }}>
-            <p
-              style={{ fontSize: '0.75rem', lineHeight: '1rem', width: '60%', margin: 0 }}
-            >
+            <p style={{ fontSize: '0.75rem', lineHeight: '1rem', width: '60%', margin: 0 }}>
               Số HĐ: {order?.code.substring(7)}
             </p>
             <p
@@ -66,7 +63,7 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
                 whiteSpace: 'nowrap',
                 flex: '1 1 0%',
                 width: '40%',
-                margin: 0
+                marginBottom: '4px'
               }}
             >
               Ngày: {dayjs().format('DD/MM/YYYY')}
@@ -79,7 +76,8 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
                 lineHeight: '1rem',
                 whiteSpace: 'nowrap',
                 flex: '1 1 0%',
-                width: '60%', margin: 0
+                width: '60%',
+                marginBottom: '4px'
               }}
             >
               {order?.floor
@@ -91,48 +89,35 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
                 fontSize: '0.75rem',
                 lineHeight: '1rem',
                 whiteSpace: 'nowrap',
-                width: '40%', margin: 0
+                width: '40%',
+                marginBottom: '4px'
               }}
             >
               Giờ: {dayjs().format('HH:mm')}
             </p>
           </div>
-          <p style={{ fontSize: '0.75rem', lineHeight: '1rem', margin: 0 }}>
+          <p style={{ fontSize: '0.75rem', lineHeight: '1rem', marginBottom: '4px' }}>
             {' '}
             Nhân viên: {order?.logs[0]?.user?.fullName}
           </p>
         </div>
 
         <table style={{ marginTop: '0.25rem', width: '100%' }}>
-          <thead
-            style={{ borderBottomWidth: '1px', borderColor: '#111827', borderStyle: "solid" }}
-          >
+          <thead style={{ borderBottom: '4px solid #111827' }}>
             <tr>
-              <th
-                style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '700' }}
-              >
+              <th style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '700' }}>
                 Tên món
               </th>
-              <th
-                style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '700' }}
-              >
-                SL
-              </th>
-              <th
-                style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '700' }}
-              >
+              <th style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '700' }}>SL</th>
+              <th style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '700' }}>
                 Đơn giá
               </th>
-              <th
-                style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '700' }}
-              >
+              <th style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '700' }}>
                 Thành tiền
               </th>
             </tr>
           </thead>
-          <tbody
-            style={{ borderTopWidth: '1px', borderColor: '#111827' }}
-          >
+          <tbody style={{ borderTopWidth: '1px', borderColor: '#111827' }}>
             {order?.foods?.map((food) => (
               <tr key={food.index}>
                 <td
@@ -190,14 +175,46 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
 
         <div style={{ marginTop: '1rem', width: '100%' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <p style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '500', margin: 0 }}>Tổng cộng</p>
-            <p style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '700', margin: 0 }}>
+            <p
+              style={{
+                fontSize: '0.75rem',
+                lineHeight: '1rem',
+                fontWeight: '500',
+                marginBottom: '4px'
+              }}
+            >
+              Tổng cộng
+            </p>
+            <p
+              style={{
+                fontSize: '0.75rem',
+                lineHeight: '1rem',
+                fontWeight: '700',
+                marginBottom: '4px'
+              }}
+            >
               {formatMoney(order?.totalPrice)}đ
             </p>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <p style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '500', margin: 0 }}>Chiết khấu</p>
-            <p style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '700', margin: 0 }}>
+            <p
+              style={{
+                fontSize: '0.75rem',
+                lineHeight: '1rem',
+                fontWeight: '500',
+                marginBottom: '4px'
+              }}
+            >
+              Chiết khấu
+            </p>
+            <p
+              style={{
+                fontSize: '0.75rem',
+                lineHeight: '1rem',
+                fontWeight: '700',
+                marginBottom: '4px'
+              }}
+            >
               {formatMoney(
                 order?.discountType === 'PERCENT'
                   ? (order?.totalPrice * order?.discount || 0) / 100
@@ -207,8 +224,24 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
             </p>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <p style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '500', margin: 0 }}>Phụ thu</p>
-            <p style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '700', margin: 0 }}>
+            <p
+              style={{
+                fontSize: '0.75rem',
+                lineHeight: '1rem',
+                fontWeight: '500',
+                marginBottom: '4px'
+              }}
+            >
+              Phụ thu
+            </p>
+            <p
+              style={{
+                fontSize: '0.75rem',
+                lineHeight: '1rem',
+                fontWeight: '700',
+                marginBottom: '4px'
+              }}
+            >
               {formatMoney(
                 order?.surchargeType === 'PERCENT'
                   ? (order?.totalPrice * order?.surcharge || 0) / 100
@@ -218,14 +251,30 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
             </p>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <p style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '500', margin: 0 }}>Thành tiền</p>
-            <p style={{ fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '700', margin: 0 }}>
+            <p
+              style={{
+                fontSize: '0.75rem',
+                lineHeight: '1rem',
+                fontWeight: '500',
+                marginBottom: '4px'
+              }}
+            >
+              Thành tiền
+            </p>
+            <p
+              style={{
+                fontSize: '0.75rem',
+                lineHeight: '1rem',
+                fontWeight: '700',
+                marginBottom: '4px'
+              }}
+            >
               {formatMoney(order?.totalNetPrice)}đ
             </p>
           </div>
         </div>
 
-        {qrCode && <QRCode value={qrCode} size={120} style={{margin: "auto", marginTop: 16}} />}
+        {qrCode && <QRCode value={qrCode} size={120} style={{ margin: 'auto', marginTop: 16 }} />}
 
         <div style={{ textAlign: 'center' }}>
           <p
@@ -234,12 +283,15 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
               fontSize: '0.75rem',
               lineHeight: '1rem',
               fontWeight: '500',
-              textAlign: 'center', marginBottom: 0
+              textAlign: 'center',
+              marginBottom: '4px'
             }}
           >
             {user?.company?.companyName} xin chân thành cảm ơn!
           </p>
-          <p style={{ fontSize: '0.75rem', lineHeight: '1rem', margin: 0 }}>mSeller - Powered by MB</p>
+          <p style={{ fontSize: '0.75rem', lineHeight: '1rem', margin: 0 }}>
+            mSeller - Powered by MB
+          </p>
         </div>
       </div>
     </div>
@@ -247,7 +299,6 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
 }
 
 const PrintOrder = ({ order, componentRef, handlePrint }) => {
-  const { t } = useTranslation()
   const [qrCode, setQrCode] = useState('null')
   const [loading, setLoading] = useState(false)
 
