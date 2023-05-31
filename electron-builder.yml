@@ -13,6 +13,7 @@ asarUnpack:
 afterSign: build/notarize.js
 win:
   executableName: mseller-pos
+  icon: ./resources/icon.png
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -38,5 +39,7 @@ appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
+  owner: hungnc051220
+  repo: mseller-pos
+  token: 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

@@ -13,8 +13,7 @@
     "build": "electron-vite build --mode development",
     "postinstall": "electron-builder install-app-deps",
     "build:win": "npm run build && electron-builder --win --config",
-    "build:mac": "npm run build && electron-builder --mac --config",
-    "build:linux": "npm run build && electron-builder --linux --config"
+    "publish": "npm run build && electron-builder --win --publish always --config"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^1.0.3",

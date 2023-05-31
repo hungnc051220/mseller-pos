@@ -274,7 +274,7 @@ const CreateAndUpdateOrder = ({ isEdit }) => {
         })),
         promotion: "",
         totalCost:
-          Math.floor(totalMoney -
+          Math.round(totalMoney -
           (discountType === "PERCENT"
             ? (totalMoney * discount) / 100
             : discount) +
@@ -310,7 +310,7 @@ const CreateAndUpdateOrder = ({ isEdit }) => {
         })),
         note: "",
         totalCost:
-          Math.floor(totalMoney -
+          Math.round(totalMoney -
           (discountType === "PERCENT"
             ? (totalMoney * discount) / 100
             : discount) +

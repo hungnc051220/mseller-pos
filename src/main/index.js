@@ -1,8 +1,13 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 const { setup: setupPushReceiver } = require('electron-push-receiver')
 import icon from '../../resources/icon.ico?asset'
+import { autoUpdater } from 'electron-updater'
+
+autoUpdater.autoDownload = false
+autoUpdater.autoInstallOnAppQuit = true;
+
 
 function createWindow() {
   // Create the browser window.
@@ -59,6 +64,10 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+
+  if(app.isPackaged){
+    autoUpdater.checkForUpdates();
+  }
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -80,8 +89,8 @@ app.on('window-all-closed', () => {
 
 async function getProducts() {
   const win = new BrowserWindow({ show: false })
-  const res = win.webContents.getPrintersAsync();
-  return res;
+  const res = win.webContents.getPrintersAsync()
+  return res
 }
 
 ipcMain.handle('products', getProducts)
@@ -91,15 +100,13 @@ const printOptions = {
   printBackground: true,
   color: true,
   margin: {
-   marginType: 'printableArea',
+    marginType: 'default'
   },
   landscape: false,
   pagesPerSheet: 1,
   collate: false,
-  copies: 1,
-  header: 'Page header',
-  footer: 'Page footer',
- };
+  copies: 1
+}
 
 //handle print
 ipcMain.handle('printComponent', async (event, url) => {
@@ -148,3 +155,37 @@ ipcMain.handle('previewComponent', async (event, url) => {
   await win.loadURL(url)
   return 'shown preview window'
 })
+
+function sendStatusToWindow(text) {
+  const dialogOpts = {
+		type: 'info',
+		buttons: ['Ok'],
+		title: 'Application Update',
+		message: text,
+		detail: text
+	}
+	return dialog.showMessageBox(dialogOpts);
+}
+
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...')
+})
+autoUpdater.on('update-available', () => {
+  sendStatusToWindow('Update available.')
+})
+autoUpdater.on('update-not-available', () => {
+  sendStatusToWindow('Update not available.')
+})
+autoUpdater.on('error', (err) => {
+  sendStatusToWindow('Error in auto-updater. ' + err)
+})
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = 'Download speed: ' + progressObj.bytesPerSecond
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
+  log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
+  sendStatusToWindow(log_message)
+})
+autoUpdater.on('update-downloaded', () => {
+  sendStatusToWindow('Update downloaded. Quitting and installing.')
+});
+
