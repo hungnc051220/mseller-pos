@@ -1,13 +1,12 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 const { setup: setupPushReceiver } = require('electron-push-receiver')
 import icon from '../../resources/icon.ico?asset'
 import { autoUpdater } from 'electron-updater'
 
-autoUpdater.autoDownload = false
-autoUpdater.autoInstallOnAppQuit = true;
-
+// autoUpdater.autoDownload = false
+// autoUpdater.autoInstallOnAppQuit = true;
 
 function createWindow() {
   // Create the browser window.
@@ -156,36 +155,22 @@ ipcMain.handle('previewComponent', async (event, url) => {
   return 'shown preview window'
 })
 
-function sendStatusToWindow(text) {
-  const dialogOpts = {
-		type: 'info',
-		buttons: ['Ok'],
-		title: 'Application Update',
-		message: text,
-		detail: text
-	}
-	return dialog.showMessageBox(dialogOpts);
-}
-
 autoUpdater.on('checking-for-update', () => {
-  sendStatusToWindow('Checking for update...')
+  // sendStatusToWindow('Checking for update...')
 })
+
 autoUpdater.on('update-available', () => {
-  sendStatusToWindow('Update available.')
 })
 autoUpdater.on('update-not-available', () => {
-  sendStatusToWindow('Update not available.')
 })
-autoUpdater.on('error', (err) => {
-  sendStatusToWindow('Error in auto-updater. ' + err)
+autoUpdater.on('error', () => {
 })
-autoUpdater.on('download-progress', (progressObj) => {
-  let log_message = 'Download speed: ' + progressObj.bytesPerSecond
-  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
-  log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
-  sendStatusToWindow(log_message)
+autoUpdater.on('download-progress', () => {
+  // let log_message = 'Download speed: ' + progressObj.bytesPerSecond
+  // log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
+  // log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
 })
 autoUpdater.on('update-downloaded', () => {
-  sendStatusToWindow('Update downloaded. Quitting and installing.')
+  // sendStatusToWindow('Update downloaded. Quitting and installing.', process.platform === 'win32' ? releaseNotes : releaseName)
 });
 

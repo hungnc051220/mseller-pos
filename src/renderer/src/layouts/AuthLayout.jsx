@@ -10,8 +10,10 @@ const AuthLayout = () => {
     <div className="flex min-h-screen">
       <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 bg-white">
         <div className="mx-auto w-full max-w-sm lg:w-96">
-          Phiên bản: {import.meta.env.RENDERER_VITE_APP_VERSION}
+         
           <Outlet />
+
+          <div className="absolute bottom-1 left-1"> Phiên bản: {import.meta.env.RENDERER_VITE_APP_VERSION}</div>
           {/* {content()} */}
         </div>
       </div>

@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.mseller.app
 productName: mSeller - POS
 directories:
   buildResources: build
@@ -42,4 +42,4 @@ publish:
   provider: github
   owner: hungnc051220
   repo: mseller-pos
-  token: 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
+  token: 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

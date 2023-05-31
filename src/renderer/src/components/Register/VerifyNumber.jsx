@@ -90,14 +90,12 @@ const VerifyNumber = ({ phoneNumber, token, setStep, isForgotPassword }) => {
       }}
     >
       <Form.Item
-        label={<p className="text-base font-bold text-black1">{t("otp")}</p>}
+        label={<p className="text-base font-bold text-black1">Mã OTP</p>}
         name="otp"
         rules={[
           {
             required: true,
-            message: t("message.validation.required", {
-              field: t("otp"),
-            }),
+            message: "Mã OTP không được để trống",
           },
           () => ({
             validator() {
@@ -112,7 +110,7 @@ const VerifyNumber = ({ phoneNumber, token, setStep, isForgotPassword }) => {
       >
         <Input
           prefix={<AiOutlineUser />}
-          placeholder={t("otp")}
+          placeholder="Nhập mã OTP"
           size="large"
           maxLength={6}
         />
@@ -122,16 +120,14 @@ const VerifyNumber = ({ phoneNumber, token, setStep, isForgotPassword }) => {
           <Form.Item
             label={
               <p className="text-base font-bold text-black1">
-                {t("newPassword")}
+                Mật khẩu mới
               </p>
             }
             name="newPassword"
             rules={[
               {
                 required: true,
-                message: t("message.validation.required", {
-                  field: t("newPassword"),
-                }),
+                message: "Mật khẩu mới không được để trống"
               },
               {
                 min: 6,
@@ -147,7 +143,7 @@ const VerifyNumber = ({ phoneNumber, token, setStep, isForgotPassword }) => {
             <Input.Password
               prefix={<AiOutlineLock />}
               type="password"
-              placeholder={t("newPassword")}
+              placeholder="Nhập mật khẩu mới"
               size="large"
             />
           </Form.Item>
@@ -164,9 +160,7 @@ const VerifyNumber = ({ phoneNumber, token, setStep, isForgotPassword }) => {
             rules={[
               {
                 required: true,
-                message: t("message.validation.required", {
-                  field: t("confirmNewPassword"),
-                }),
+                message: "Mật khẩu mới không được để trống"
               },
               {
                 min: 6,
@@ -191,7 +185,7 @@ const VerifyNumber = ({ phoneNumber, token, setStep, isForgotPassword }) => {
             <Input.Password
               prefix={<AiOutlineLock />}
               type="password"
-              placeholder={t("confirmNewPassword")}
+              placeholder="Nhập lại mật khẩu mới"
               size="large"
             />
           </Form.Item>
@@ -214,7 +208,7 @@ const VerifyNumber = ({ phoneNumber, token, setStep, isForgotPassword }) => {
             block
             loading={isLoading || isLoadingChangePassword}
           >
-            "Xác nhận"
+            Xác nhận
           </Button>
 
           {!isForgotPassword && (

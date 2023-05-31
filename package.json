@@ -1,6 +1,6 @@
 {
   "name": "mseller-pos",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Phần mềm quản lý bán hàng",
   "main": "./out/main/index.js",
   "author": "HungNC",
