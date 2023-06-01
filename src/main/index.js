@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 const { setup: setupPushReceiver } = require('electron-push-receiver')
@@ -170,7 +170,19 @@ autoUpdater.on('download-progress', () => {
   // log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
   // log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
 })
-autoUpdater.on('update-downloaded', () => {
-  // sendStatusToWindow('Update downloaded. Quitting and installing.', process.platform === 'win32' ? releaseNotes : releaseName)
-});
+
+autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Restart', 'Later'],
+    title: 'Cập nhật ứng dụng',
+    message: process.platform === 'win32' ? releaseNotes : releaseName,
+    detail:
+      'Phiên bản mới đã được tải xuống. Khởi động lại ứng dụng để áp dụng cập nhật.'
+  }
+
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) autoUpdater.quitAndInstall()
+  })
+})
 

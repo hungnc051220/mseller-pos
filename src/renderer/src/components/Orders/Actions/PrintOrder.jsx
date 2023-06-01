@@ -34,15 +34,15 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
         <h3 style={{ textAlign: 'center', fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>
           {user?.company?.companyName}
         </h3>
-        <p style={{ textAlign: 'center', fontSize: '12px', marginBottom: '4px' }}>Địa chỉ:</p>
-        <p style={{ textAlign: 'center', fontSize: '12px', marginBottom: '4px' }}>
+        <p style={{ textAlign: 'center', fontSize: '12px', margin: 0 }}>Địa chỉ:</p>
+        <p style={{ textAlign: 'center', fontSize: '12px', margin: 0 }}>
           Hotline: {user?.phoneNumber}
         </p>
 
         <h4
           style={{
             marginTop: '8px',
-            marginBottom: '8px',
+            marginBottom: '16px',
             fontSize: '18px',
             fontWeight: 700,
             textAlign: 'center'
@@ -51,7 +51,7 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
           HOÁ ĐƠN BÁN HÀNG
         </h4>
 
-        <div className="space-y-[2px] pb-2" style={{ paddingBottom: '8px' }}>
+        <div style={{ paddingBottom: '8px' }}>
           <div style={{ display: 'flex', width: '100%' }}>
             <p style={{ fontSize: '0.75rem', lineHeight: '1rem', width: '60%', margin: 0 }}>
               Số HĐ: {order?.code.substring(7)}
@@ -63,7 +63,7 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
                 whiteSpace: 'nowrap',
                 flex: '1 1 0%',
                 width: '40%',
-                marginBottom: '4px'
+                margin: 0
               }}
             >
               Ngày: {dayjs().format('DD/MM/YYYY')}
@@ -77,7 +77,7 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
                 whiteSpace: 'nowrap',
                 flex: '1 1 0%',
                 width: '60%',
-                marginBottom: '4px'
+                margin: 0
               }}
             >
               {order?.floor
@@ -90,13 +90,13 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
                 lineHeight: '1rem',
                 whiteSpace: 'nowrap',
                 width: '40%',
-                marginBottom: '4px'
+                margin: 0
               }}
             >
               Giờ: {dayjs().format('HH:mm')}
             </p>
           </div>
-          <p style={{ fontSize: '0.75rem', lineHeight: '1rem', marginBottom: '4px' }}>
+          <p style={{ fontSize: '0.75rem', lineHeight: '1rem', margin: 0 }}>
             {' '}
             Nhân viên: {order?.logs[0]?.user?.fullName}
           </p>
@@ -180,7 +180,7 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
                 fontSize: '0.75rem',
                 lineHeight: '1rem',
                 fontWeight: '500',
-                marginBottom: '4px'
+                margin: 0
               }}
             >
               Tổng cộng
@@ -190,7 +190,7 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
                 fontSize: '0.75rem',
                 lineHeight: '1rem',
                 fontWeight: '700',
-                marginBottom: '4px'
+                margin: 0
               }}
             >
               {formatMoney(order?.totalPrice)}đ
@@ -202,7 +202,7 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
                 fontSize: '0.75rem',
                 lineHeight: '1rem',
                 fontWeight: '500',
-                marginBottom: '4px'
+                margin: 0
               }}
             >
               Chiết khấu
@@ -212,7 +212,7 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
                 fontSize: '0.75rem',
                 lineHeight: '1rem',
                 fontWeight: '700',
-                marginBottom: '4px'
+                margin: 0
               }}
             >
               {formatMoney(
@@ -229,7 +229,7 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
                 fontSize: '0.75rem',
                 lineHeight: '1rem',
                 fontWeight: '500',
-                marginBottom: '4px'
+                margin: 0
               }}
             >
               Phụ thu
@@ -239,7 +239,7 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
                 fontSize: '0.75rem',
                 lineHeight: '1rem',
                 fontWeight: '700',
-                marginBottom: '4px'
+                margin: 0
               }}
             >
               {formatMoney(
@@ -256,7 +256,7 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
                 fontSize: '0.75rem',
                 lineHeight: '1rem',
                 fontWeight: '500',
-                marginBottom: '4px'
+                margin: 0
               }}
             >
               Thành tiền
@@ -266,7 +266,7 @@ export const ContentPrint = ({ componentRef, order, qrCode }) => {
                 fontSize: '0.75rem',
                 lineHeight: '1rem',
                 fontWeight: '700',
-                marginBottom: '4px'
+                margin: 0
               }}
             >
               {formatMoney(order?.totalNetPrice)}đ

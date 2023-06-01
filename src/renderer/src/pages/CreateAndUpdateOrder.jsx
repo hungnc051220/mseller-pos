@@ -436,7 +436,7 @@ const CreateAndUpdateOrder = ({ isEdit }) => {
           </p>
           <p className="text-base font-medium">
             {!dataOrder?.codeTakeAway
-              ? `Vị trí: ${floorName ? floorName - tableName : ""}`
+              ? `Vị trí: ${floorName ? `${floorName} - ${tableName}` : ""}`
               : `Mã: #${dataOrder?.codeTakeAway} - Khách hàng: ${
                   dataOrder?.customerName || ""
                 }`}
