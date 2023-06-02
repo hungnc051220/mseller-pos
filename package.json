@@ -15,7 +15,7 @@
     "build:win": "npm run build && electron-builder --win --config",
     "build:mac": "npm run build && electron-builder --mac --config",
     "build:linux": "npm run build && electron-builder --linux --config",
-    "publish": "set GH_token=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 && npm run build && electron-builder --win --publish always --config"
+    "publish": "npm run build && electron-builder --win --publish always --config"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^1.0.3",
