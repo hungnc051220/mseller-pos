@@ -34,15 +34,9 @@ import dayjs from "dayjs";
 import { HistoryOrder, UpdateOrder } from "../components";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { ContentPrint } from "../components/Orders/Actions/PrintOrder";
+import { listStatus } from "../constants";
 
 const { TextArea } = Input;
-
-const listStatus = {
-  WAITING: { color: "text-[#54007B]", bgColor: "bg-[#ECDEF2]" },
-  CREATED: { color: "text-[#E58C05]", bgColor: "bg-[#FFE9C9]" },
-  COMPLETED: { color: "text-[#02C081]", bgColor: "bg-[#E1FFF7]" },
-  CANCELLED: { color: "text-[#E13641]", bgColor: "bg-[#FFE2E2]" },
-};
 
 const StepDetail = ({
   order,
@@ -219,7 +213,7 @@ const StepDetail = ({
               "inline-flex w-28 items-center justify-center rounded-xl px-2 py-1 text-sm"
             )}
           >
-            {t(order?.status)}
+            {listStatus[order?.status]?.text}
           </div>
         )}
       </div>

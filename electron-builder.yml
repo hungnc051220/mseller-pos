@@ -1,5 +1,5 @@
 appId: com.mseller.app
-productName: mSeller - POS
+productName: mSeller POS
 directories:
   buildResources: build
 files:
@@ -42,4 +42,3 @@ publish:
   provider: github
   owner: hungnc051220
   repo: mseller-pos
-  token: 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

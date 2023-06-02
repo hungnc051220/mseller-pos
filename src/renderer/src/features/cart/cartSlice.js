@@ -40,6 +40,7 @@ export const cartSlice = createSlice({
         if (orderItem.newQuantity) {
           state.orderFoods[itemIndex].quantity = orderItem.newQuantity;
         } else {
+          console.log(state.orderFoods[itemIndex].quantity);
           state.orderFoods[itemIndex].quantity += 1;
         }
 
@@ -102,7 +103,7 @@ export const cartSlice = createSlice({
           isEqual(x.options, orderItem.options) &&
           (x.note || "").toLowerCase() === (orderItem.note || "").toLowerCase()
       );
-      state.orderFoods[itemIndex].quantity -= 1;
+      state.orderFoods[itemIndex].quantity = +((state.orderFoods[itemIndex].quantity - 1).toFixed(2));
     },
     removeFromCart: (state, action) => {
       const orderItem = action.payload;

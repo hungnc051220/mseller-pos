@@ -37,6 +37,7 @@ import { RiTakeawayLine } from "react-icons/ri";
 const { RangePicker } = DatePicker;
 const dateFormat = "DD/MM/YYYY";
 const dateFormatList = ["HH:mm:ss DD/MM/YYYY", "HH:mm:ss DD/MM/YY"];
+import { listStatus } from "../constants";
 
 const Orders = () => {
   const { t } = useTranslation();
@@ -97,13 +98,6 @@ const Orders = () => {
 
   const getTotal = (list) => {
     return list.reduce((total, item) => (total += item.quantity), 0);
-  };
-
-  const listStatus = {
-    WAITING: { color: "text-[#54007B]", bgColor: "bg-[#ECDEF2]" },
-    CREATED: { color: "text-[#E58C05]", bgColor: "bg-[#FFE9C9]" },
-    COMPLETED: { color: "text-[#02C081]", bgColor: "bg-[#E1FFF7]" },
-    CANCELLED: { color: "text-[#E13641]", bgColor: "bg-[#FFE2E2]" },
   };
 
   const columns = [
@@ -174,7 +168,7 @@ const Orders = () => {
             "inline-flex w-28 items-center justify-center rounded-xl px-2 py-1 text-sm"
           )}
         >
-          {t(text)}
+          {listStatus[text]?.text}
         </div>
       ),
       align: "center",
@@ -184,7 +178,7 @@ const Orders = () => {
       title: "Phương thức thanh toán",
       dataIndex: "paymentType",
       key: "paymentType",
-      render: (text) => (text === "CASH" ? t("CASH") : t("bankTransfer")),
+      render: (text) => (text === "CASH" ? "Tiền mặt" : "Chuyển khoản"),
       width: "200px",
     },
   ];

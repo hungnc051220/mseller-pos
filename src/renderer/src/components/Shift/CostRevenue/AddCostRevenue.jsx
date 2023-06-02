@@ -77,7 +77,7 @@ const AddCostRevenue = () => {
             ]}
             className="mb-3"
           >
-            <Input.TextArea placeholder={t("content")} rows={3} />
+            <Input.TextArea placeholder="Nội dung giao dịch" rows={3} />
           </Form.Item>
           <Form.Item
             name="amount"

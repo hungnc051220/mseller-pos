@@ -12,6 +12,7 @@ import { BsTrash } from "react-icons/bs";
 import { AiOutlinePlus, AiOutlineUserAdd } from "react-icons/ai";
 import { StaffDetail } from "../components";
 import { useDebounce } from "../hooks/useDebounce";
+import { listStatus } from "../constants";
 
 const Staffs = () => {
   const { t } = useTranslation();
@@ -43,13 +44,6 @@ const Staffs = () => {
 
   const getTotal = (list) => {
     return list.reduce((total, item) => (total += item.quantity), 0);
-  };
-
-  const listStatus = {
-    WAITING: { color: "text-[#54007B]", bgColor: "bg-[#ECDEF2]" },
-    CREATED: { color: "text-[#E58C05]", bgColor: "bg-[#FFE9C9]" },
-    COMPLETED: { color: "text-[#02C081]", bgColor: "bg-[#E1FFF7]" },
-    CANCELLED: { color: "text-[#E13641]", bgColor: "bg-[#FFE2E2]" },
   };
 
   const columns = [

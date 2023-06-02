@@ -26,7 +26,7 @@ const costRevenueApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["CostRevenue"],
+      invalidatesTags: ["CostRevenue", "Shift"],
     }),
     updateCostRevenue: builder.mutation({
       query: (data) => ({
@@ -34,14 +34,14 @@ const costRevenueApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["CostRevenue"],
+      invalidatesTags: ["CostRevenue", "Shift"],
     }),
     deleteCostRevenue: builder.mutation({
       query: (crId) => ({
         url: `/api/cost-revenue/${crId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["CostRevenue"],
+      invalidatesTags: ["CostRevenue", "Shift"],
     }),
   }),
 });

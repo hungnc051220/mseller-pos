@@ -36,61 +36,61 @@ const ShiftDetail = ({ selectedShift, setSelectedShift }) => {
       Chi tiết ca
       </h2>
 
-      <div className="flex flex-col sm:flex-row">
-        <div className="w-full space-y-2 pr-2 sm:w-1/3">
-          <div className="flex items-center justify-between gap-2 border-b border-gray-200 py-3">
-            <p className="text-base font-normal">Mã ca:</p>
-            <p className="rounded-lg bg-black1 py-1 px-2 font-bold text-white">
+      <div className="flex flex-col">
+        <div className="w-full mb-4 grid grid-cols-4 border border-gray-200 rounded-lg px-4">
+          <div className="flex items-center justify-start gap-2 border-b border-gray-200 py-3">
+            <p className="font-normal">Mã ca:</p>
+            <p className="text-black1">
               {data?.code}
             </p>
           </div>
-          <div className="flex items-center justify-between gap-2 border-b border-gray-200 py-3">
-            <p className="text-base font-normal">Trạng thái:</p>
+          <div className="flex items-center justify-start gap-2 border-b border-gray-200 py-3">
+            <p className="font-normal">Trạng thái:</p>
             <p className={data?.status ? "text-primary" : "text-red-500"}>
               {data?.status ? "Đang diễn ra" : "Đã kết thúc"}
             </p>
           </div>
-          <div className="flex items-center justify-between gap-2 border-b border-gray-200 py-3">
-            <p className="text-base font-normal">Tên nhân viên:</p>
+          <div className="flex items-center justify-start gap-2 border-b border-gray-200 py-3">
+            <p className="font-normal">Tên nhân viên:</p>
             <p className="font-bold text-black1">{data?.employee?.fullName}</p>
           </div>
-          <div className="flex items-center justify-between gap-2 border-b border-gray-200 py-3">
-            <p className="text-base font-normal">Giờ mở ca:</p>
+          <div className="flex items-center justify-start gap-2 border-b border-gray-200 py-3">
+            <p className="font-normal">Giờ mở ca:</p>
             <p className="font-bold text-black1">
               {dayjs(data?.timeStartShifts).format("HH:mm DD/MM/YYYY")}
             </p>
           </div>
-          <div className="flex items-center justify-between gap-2 border-b border-gray-200 py-3">
-            <p className="text-base font-normal">Giờ kết thúc ca:</p>
+          <div className="flex items-center justify-start gap-2 border-b border-gray-200 py-3">
+            <p className="font-normal">Giờ kết thúc ca:</p>
             <p className="font-bold text-black1">
               {data?.timeCloseShifts
                 ? dayjs(data?.timeCloseShifts).format("HH:mm DD/MM/YYYY")
                 : "-"}
             </p>
           </div>
-          <div className="flex items-center justify-between gap-2 border-b border-gray-200 py-3">
-            <p className="text-base font-normal">Số dư đầu ca:</p>
+          <div className="flex items-center justify-start gap-2 border-b border-gray-200 py-3">
+            <p className="font-normal">Số dư đầu ca:</p>
             <p className="font-bold text-black1">
               {formatMoney(data?.openingBalance)}đ
             </p>
           </div>
-          <div className="flex items-center justify-between gap-2 border-b border-gray-200 py-3">
-            <p className="text-base font-normal">Số dư cuối ca:</p>
+          <div className="flex items-center justify-start gap-2 border-b border-gray-200 py-3">
+            <p className="font-normal">Số dư cuối ca:</p>
             <p className="font-bold text-black1">
               {data?.endingBalance
                 ? `${formatMoney(data?.endingBalance)}đ`
                 : "-"}
             </p>
           </div>
-          <div className="flex items-center justify-between gap-2 border-b border-gray-200 py-3">
-            <p className="text-base font-normal">Tổng số đơn:</p>
+          <div className="flex items-center justify-start gap-2 border-b border-gray-200 py-3">
+            <p className="font-normal">Tổng số đơn:</p>
             <p className="font-bold text-black1">{data?.orders?.length}</p>
           </div>
         </div>
 
         <Tabs
           type="card"
-          className="mt-4 w-full pl-4 sm:mt-0 sm:w-2/3"
+          className="w-full"
           defaultActiveKey="1"
           items={[
             {
@@ -107,7 +107,7 @@ const ShiftDetail = ({ selectedShift, setSelectedShift }) => {
         />
       </div>
       <div className="space-y-3 pt-4 text-right">
-        <Button size="large" onClick={handleClose}>
+        <Button onClick={handleClose}>
           Đóng
         </Button>
       </div>

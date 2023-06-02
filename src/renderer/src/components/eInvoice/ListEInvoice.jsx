@@ -100,10 +100,10 @@ const ListEInvoice = () => {
   };
 
   const listStatus = {
-    WAITING: { color: "text-[#54007B]", bgColor: "bg-[#ECDEF2]" },
-    CREATED: { color: "text-[#E58C05]", bgColor: "bg-[#FFE9C9]" },
-    COMPLETED: { color: "text-[#02C081]", bgColor: "bg-[#E1FFF7]" },
-    CANCELLED: { color: "text-[#E13641]", bgColor: "bg-[#FFE2E2]" },
+    WAITING: { color: "text-[#54007B]", bgColor: "bg-[#ECDEF2]", text: "Chờ xác nhận" },
+    CREATED: { color: "text-[#E58C05]", bgColor: "bg-[#FFE9C9]", text: "Đang xử lý" },
+    COMPLETED: { color: "text-[#02C081]", bgColor: "bg-[#E1FFF7]", text: "Hoàn thành" },
+    CANCELLED: { color: "text-[#E13641]", bgColor: "bg-[#FFE2E2]", text: "Huỷ bỏ" },
   };
 
   const columns = [
@@ -164,7 +164,7 @@ const ListEInvoice = () => {
             "inline-flex w-28 items-center justify-center rounded-xl px-2 py-1 text-sm"
           )}
         >
-          {t(text)}
+         {listStatus[text]?.text}
         </div>
       ),
       align: "center",

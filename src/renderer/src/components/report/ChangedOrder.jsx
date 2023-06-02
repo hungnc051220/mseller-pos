@@ -166,7 +166,7 @@ const ChangedOrder = () => {
             {uniq(mappedData).map((item) => {
               return (
                 <Tag color={listStatusAction[item]?.color} key={item}>
-                  {t(item)}
+                  {listStatusAction[item]?.text}
                 </Tag>
               );
             })}
@@ -195,7 +195,7 @@ const ChangedOrder = () => {
             "inline-flex w-28 items-center justify-center rounded-xl px-2 py-1 text-sm"
           )}
         >
-          {t(text)}
+          {listStatus[text]?.text}
         </div>
       ),
       align: "center",
@@ -204,7 +204,7 @@ const ChangedOrder = () => {
       title: "Phương thức thanh toán",
       dataIndex: "paymentType",
       key: "paymentType",
-      render: (text) => (text === "CASH" ? t("CASH") : t("bankTransfer")),
+      render: (text) => (text === "CASH" ? "Tiền mặt" : "Chuyển khoản"),
     },
   ];
 

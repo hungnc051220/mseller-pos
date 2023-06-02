@@ -4,21 +4,28 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 const { setup: setupPushReceiver } = require('electron-push-receiver')
 import icon from '../../resources/icon.ico?asset'
 import { autoUpdater } from 'electron-updater'
+import log from 'electron-log'
 
-// autoUpdater.autoDownload = false
-// autoUpdater.autoInstallOnAppQuit = true;
+autoUpdater.logger = log
+autoUpdater.logger.transports.file.level = 'info'
+log.info('App starting...')
+
+autoUpdater.autoDownload = false
+autoUpdater.autoInstallOnAppQuit = true
+
+let mainWindow
 
 function createWindow() {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : { icon }),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
-    },
-    transparent: true
+    }
+    // transparent: true
   })
 
   mainWindow.on('ready-to-show', () => {
@@ -64,8 +71,8 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 
-  if(app.isPackaged){
-    autoUpdater.checkForUpdates();
+  if (app.isPackaged) {
+    autoUpdater.checkForUpdates()
   }
 })
 
@@ -93,6 +100,26 @@ async function getProducts() {
 }
 
 ipcMain.handle('products', getProducts)
+
+ipcMain.on('checkForUpdate', () => {
+  autoUpdater.logger = log
+  autoUpdater.logger.transports.file.level = 'info'
+  autoUpdater.autoDownload = false
+  autoUpdater.checkForUpdatesAndNotify()
+})
+
+ipcMain.on('test', () => {
+  log.info('hello World!')
+  mainWindow.webContents.send('message', { version: '1.0.0', lastestVersion: '1.0.1' })
+})
+
+ipcMain.on('downloadUpdate', () => {
+  autoUpdater.downloadUpdate()
+})
+
+ipcMain.on('quitAndInstall', () => {
+  autoUpdater.quitAndInstall()
+})
 
 const printOptions = {
   silent: true,
@@ -155,34 +182,39 @@ ipcMain.handle('previewComponent', async (event, url) => {
   return 'shown preview window'
 })
 
+function sendStatusToWindow(text) {
+  mainWindow.webContents.send('message', text)
+}
+
 autoUpdater.on('checking-for-update', () => {
-  // sendStatusToWindow('Checking for update...')
+  log.info('print from checking-for-update')
+  sendStatusToWindow({ type: 'checking-for-update' })
 })
 
-autoUpdater.on('update-available', () => {
+autoUpdater.on('update-available', ({ releaseName }) => {
+  log.info('print from update-available')
+  sendStatusToWindow({ type: 'update-available', releaseName })
 })
+
 autoUpdater.on('update-not-available', () => {
+  log.info('print from update-not-available')
+  sendStatusToWindow({ type: 'update-not-available' })
 })
-autoUpdater.on('error', () => {
+
+autoUpdater.on('error', (error) => {
+  log.info('print from update-error' + error)
+  sendStatusToWindow({ type: 'error', error })
 })
-autoUpdater.on('download-progress', () => {
+
+autoUpdater.on('download-progress', (progressObj) => {
   // let log_message = 'Download speed: ' + progressObj.bytesPerSecond
   // log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
   // log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
+  // const log_message = progressObj.percent + '%'
+  sendStatusToWindow({ type: 'download-progress', progressObj })
 })
 
-autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['Restart', 'Later'],
-    title: 'Cập nhật ứng dụng',
-    message: process.platform === 'win32' ? releaseNotes : releaseName,
-    detail:
-      'Phiên bản mới đã được tải xuống. Khởi động lại ứng dụng để áp dụng cập nhật.'
-  }
-
-  dialog.showMessageBox(dialogOpts).then((returnValue) => {
-    if (returnValue.response === 0) autoUpdater.quitAndInstall()
-  })
+autoUpdater.on('update-downloaded', () => {
+  log.info('update-downloaded')
+  sendStatusToWindow({ type: 'update-downloaded' })
 })
-

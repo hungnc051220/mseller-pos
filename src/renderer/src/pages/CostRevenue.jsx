@@ -469,6 +469,7 @@ const Report = () => {
                         pageSize,
                         pageSizeOptions: [20, 50, 100],
                         total: dataCostRevenue?.totalElements,
+                        hideOnSinglePage: true,
                         onChange: onChangePage,
                         showTotal: (total, range) =>
                           `${range[0]}-${range[1]} của ${total} bản ghi`,

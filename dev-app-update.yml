@@ -1,5 +1,4 @@
 provider: github
 owner: hungnc051220
 repo: mseller-pos
-token: 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
 updaterCacheDirName: mseller-pos-updater
