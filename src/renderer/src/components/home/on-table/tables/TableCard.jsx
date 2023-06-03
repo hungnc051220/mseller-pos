@@ -6,9 +6,10 @@ import duration from "dayjs/plugin/duration";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { BsClockHistory } from "react-icons/bs";
-import { IoNotifications } from "react-icons/io5";
+import { IoFastFoodOutline, IoNotifications } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
 import EditTable from "./EditTable";
+import { MdOutlineEventNote } from "react-icons/md";
 
 dayjs.extend(duration);
 
@@ -204,48 +205,97 @@ const TableCard = ({ floors, floorId, table, floorName }) => {
         open={isModalOpen}
         footer={null}
         onCancel={handleCancel}
+        width={1280}
       >
         <div className="flex justify-end">
-        <Button type="primary" onClick={() => {
-          navigate("/order/create", {
-            state: {
-              tableId: table?.id,
-              tableName: table?.name,
-              floorId,
-              floorName,
-            },
-          })
-        }}>+Tạo đơn</Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              navigate("/order/create", {
+                state: {
+                  tableId: table?.id,
+                  tableName: table?.name,
+                  floorId,
+                  floorName,
+                },
+              });
+            }}
+          >
+            +Tạo đơn
+          </Button>
         </div>
-        <List
-        className="mt-2"
+        {/* <List
+          className="mt-2"
           bordered
           dataSource={table?.orders || []}
           renderItem={(item) => (
-            <List.Item className="hover:bg-green-100 cursor-pointer" onClick={() => {
-              navigate(`/order/edit`, {
+            <List.Item
+              className="cursor-pointer hover:bg-green-100"
+              onClick={() => {
+                navigate(`/order/edit`, {
                   state: {
                     orderId: item.id,
                     tableName: table?.name,
                     floorName,
                   },
-                })
-            }}>
+                });
+              }}
+            >
               <div>
                 <p className="font-medium text-black1">{item.code}</p>
                 <div className="flex items-center gap-1 text-orange-500">
-                <BsClockHistory size={14} color="#f97316" />
-                <p className="text-sm font-normal">
-                  {getTime(item.createdAt)}
-                </p>
-              </div>
+                  <BsClockHistory size={14} color="#f97316" />
+                  <p className="text-sm font-normal">
+                    {getTime(item.createdAt)}
+                  </p>
+                </div>
               </div>
               <p className="text-base font-medium">
                 {formatMoney(item.totalNetPrice)}đ
               </p>
             </List.Item>
           )}
-        />
+        /> */}
+
+        <div className="mt-6 mb-2 grid grid-cols-4 gap-x-4 gap-y-6">
+          {table?.orders?.map((order) => (
+            <div
+              className="relative cursor-pointer rounded-lg border-[1px] bg-white shadow-md hover:shadow-lg"
+              key={order.id}
+              onClick={() => {
+                navigate(`/order/edit`, {
+                  state: {
+                    orderId: order.id,
+                    tableName: table?.name,
+                    floorName,
+                  },
+                });
+              }}
+            >
+              <div className="card__pricing">
+                <MdOutlineEventNote size={20} color="#fff" />
+              </div>
+              <div className="rounded-t-lg border-b border-gray-200 bg-gray-100 p-4">
+                <p className="text-black1 font-semibold">{order.code}</p>
+              </div>
+
+              <div className="flex items-center justify-between p-4">
+                <div>
+                  <div className="flex items-center gap-1 text-orange-500">
+                    <BsClockHistory size={14} color="#f97316" />
+                    <p className="text-base font-normal">
+                      {getTime(order.createdAt)}
+                    </p>
+                  </div>
+                </div>
+
+                <p className="text-base font-medium">
+                  {formatMoney(order.totalNetPrice)}đ
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </Modal>
     </>
   );

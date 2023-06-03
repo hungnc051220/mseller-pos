@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import { formatMoney } from '@/utils/common'
 import { Button, Spin } from 'antd'
 import { AiOutlinePlus } from 'react-icons/ai'
+import { listStatus } from '@/constants'
 
 const TakeawayOrders = ({ orders, isLoading }) => {
   const { t } = useTranslation()
@@ -56,7 +57,7 @@ const TakeawayOrders = ({ orders, isLoading }) => {
                     </div>
                   )}
                 </div>
-                <p className="text-orange-500">{t(order.status)}</p>
+                <p className="text-orange-500">{listStatus[order.status]?.text}</p>
               </div>
               <div className="flex items-center justify-between gap-1">
                 <div>Tên nhân viên:</div>
@@ -71,11 +72,11 @@ const TakeawayOrders = ({ orders, isLoading }) => {
                 <p>{dayjs(order.logs[0].actionDatetime).format('HH:mm DD/MM/YYYY')}</p>
               </div>
               <div className="flex items-center justify-between gap-1">
-                <div>{t('totalPrice')}:</div>
+                <div>Tổng tiền:</div>
                 <p>{formatMoney(order.totalNetPrice)}đ</p>
               </div>
               <div className="flex items-center justify-between gap-1">
-                <div>{t('orderCode')}:</div>
+                <div>Mã đơn hàng:</div>
                 <p>{order.code}</p>
               </div>
             </div>
