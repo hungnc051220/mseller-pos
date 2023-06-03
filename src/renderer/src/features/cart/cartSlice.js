@@ -40,7 +40,6 @@ export const cartSlice = createSlice({
         if (orderItem.newQuantity) {
           state.orderFoods[itemIndex].quantity = orderItem.newQuantity;
         } else {
-          console.log(state.orderFoods[itemIndex].quantity);
           state.orderFoods[itemIndex].quantity += 1;
         }
 

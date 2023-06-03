@@ -73,7 +73,7 @@ const CreateAndUpdateOrder = ({ isEdit }) => {
       dispatch(clearOrder());
     }
     if(!isEdit && dataTable){
-      dispatch(addAllToCart(dataTable?.data?.foodDefaults?.map(item => ({...item, quantity: 1})) || []));
+      dispatch(addAllToCart(dataTable?.data?.foodDefaults?.map(item => ({...item, quantity: 1, options: []})) || []));
     }
   }, [isEdit, dataTable])
 
