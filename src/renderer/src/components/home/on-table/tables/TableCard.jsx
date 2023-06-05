@@ -10,6 +10,8 @@ import { IoFastFoodOutline, IoNotifications } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
 import EditTable from "./EditTable";
 import { MdOutlineEventNote } from "react-icons/md";
+import { FcMoneyTransfer } from 'react-icons/fc';
+import PaymentOrder from "../../../Orders/Actions/PaymentOrder";
 
 dayjs.extend(duration);
 
@@ -224,40 +226,8 @@ const TableCard = ({ floors, floorId, table, floorName }) => {
             +Tạo đơn
           </Button>
         </div>
-        {/* <List
-          className="mt-2"
-          bordered
-          dataSource={table?.orders || []}
-          renderItem={(item) => (
-            <List.Item
-              className="cursor-pointer hover:bg-green-100"
-              onClick={() => {
-                navigate(`/order/edit`, {
-                  state: {
-                    orderId: item.id,
-                    tableName: table?.name,
-                    floorName,
-                  },
-                });
-              }}
-            >
-              <div>
-                <p className="font-medium text-black1">{item.code}</p>
-                <div className="flex items-center gap-1 text-orange-500">
-                  <BsClockHistory size={14} color="#f97316" />
-                  <p className="text-sm font-normal">
-                    {getTime(item.createdAt)}
-                  </p>
-                </div>
-              </div>
-              <p className="text-base font-medium">
-                {formatMoney(item.totalNetPrice)}đ
-              </p>
-            </List.Item>
-          )}
-        /> */}
 
-        <div className="mt-6 mb-2 grid grid-cols-4 gap-x-4 gap-y-6">
+        <div className="mb-2 mt-6 grid grid-cols-4 gap-x-4 gap-y-6">
           {table?.orders?.map((order) => (
             <div
               className="relative cursor-pointer rounded-lg border-[1px] bg-white shadow-md hover:shadow-lg"
@@ -276,9 +246,18 @@ const TableCard = ({ floors, floorId, table, floorName }) => {
                 <MdOutlineEventNote size={20} color="#fff" />
               </div>
               <div className="rounded-t-lg border-b border-gray-200 bg-gray-100 p-4">
-                <p className="text-black1 font-semibold">{order.code}</p>
+                <p className="font-semibold text-black1">{order.code}</p>
               </div>
 
+              <div className="flex items-center gap-2 p-4">
+                <div>
+                  <p>Người tạo: {order.employee.fullName}</p>
+                  <p>
+                    Thời gian tạo:{" "}
+                    {dayjs(order.createdAt).format("HH:mm DD/MM/YYYY")}
+                  </p>
+                </div>
+              </div>
               <div className="flex items-center justify-between p-4">
                 <div>
                   <div className="flex items-center gap-1 text-orange-500">
@@ -289,9 +268,13 @@ const TableCard = ({ floors, floorId, table, floorName }) => {
                   </div>
                 </div>
 
-                <p className="text-base font-medium">
-                  {formatMoney(order.totalNetPrice)}đ
-                </p>
+                <div className="flex items-center gap-2">
+                  <FcMoneyTransfer size={20}/>
+                  <p className="text-base font-medium">
+                    {formatMoney(order.totalNetPrice)}đ
+                  </p>
+                </div>
+
               </div>
             </div>
           ))}

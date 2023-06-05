@@ -73,7 +73,7 @@ const CreateAndUpdateOrder = ({ isEdit }) => {
       dispatch(clearOrder());
     }
     if(!isEdit && dataTable){
-      dispatch(addAllToCart(dataTable?.data?.foodDefaults?.map(item => ({...item, quantity: 1, options: []})) || []));
+      dispatch(addAllToCart(dataTable?.data?.foodDefaults?.map(item => ({...item, quantity: 1})) || []));
     }
   }, [isEdit, dataTable])
 
@@ -271,6 +271,7 @@ const CreateAndUpdateOrder = ({ isEdit }) => {
           quantity: item.quantity,
           optionIds: item.options?.flat(1).map((option) => option.id),
           note: item.note,
+          price: item.price
         })),
         promotion: "",
         totalCost:
@@ -294,6 +295,12 @@ const CreateAndUpdateOrder = ({ isEdit }) => {
       navigate("/");
     } catch (error) {
       console.log(error);
+      if(error?.data?.title){
+        toast.error(error?.data?.title)
+      }
+      else {
+        toast.error("Tạo đơn thất bại")
+      }
     }
   };
 
@@ -307,6 +314,7 @@ const CreateAndUpdateOrder = ({ isEdit }) => {
           optionIds: item.options.flat(1).map((option) => option.id),
           index: item.index,
           note: item.note,
+          price: item.price
         })),
         note: "",
         totalCost:
@@ -532,7 +540,7 @@ const CreateAndUpdateOrder = ({ isEdit }) => {
                     />
                   )}
                   <PaymentOrder
-                    order={dataOrder}
+                    order={dataOrderChangeDetail}
                     open={openPayment}
                     openTbilling={openTbilling}
                     setOpenTbilling={setOpenTbilling}

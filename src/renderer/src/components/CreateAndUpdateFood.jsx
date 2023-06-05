@@ -101,6 +101,7 @@ const CreateAndUpdateFood = ({
           rounding: selectedFood?.billingTime?.rounding,
           billingTimePolicies: selectedFood?.billingTime?.billingTimePolicies,
         },
+        changePrice: selectedFood?.changePrice
       });
 
       setFoodSoldOut(selectedFood.soldOut);
@@ -127,6 +128,7 @@ const CreateAndUpdateFood = ({
       unit: val.unit,
       billingTime: val.billingTime,
       tables: val.tables,
+      changePrice: val?.changePrice
     };
 
     try {
@@ -177,6 +179,7 @@ const CreateAndUpdateFood = ({
       unit: val.unit,
       billingTime: val.billingTime,
       tables: val.tables,
+      changePrice: val?.changePrice
     };
 
     const valueSoldOut = {
@@ -415,6 +418,14 @@ const CreateAndUpdateFood = ({
                   }
                 />
               </Form.Item>
+
+              <Form.Item
+            label="Giá linh hoạt"
+            name="changePrice"
+            valuePropName="checked"
+          >
+            <Switch />
+          </Form.Item>
             </>
           )}
 

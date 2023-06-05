@@ -1,43 +1,46 @@
-import { Input, Modal, Tag } from "antd";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import ButtonChangeQuantityWithNote from "../ButtonChangeQuantityWithNote";
-import { motion } from "framer-motion";
-import { classNames, formatMoney } from "../../utils/common";
-import FoodGroup from "./FoodGroup";
-import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../../features/cart/cartSlice";
-import { Scrollbars } from "react-custom-scrollbars-2";
-import FoodGroupCheckbox from "./FoodGroupCheckbox";
+import { Button, Input, InputNumber, Modal, Tag } from 'antd'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import ButtonChangeQuantityWithNote from '../ButtonChangeQuantityWithNote'
+import { motion } from 'framer-motion'
+import { classNames, formatMoney } from '../../utils/common'
+import FoodGroup from './FoodGroup'
+import { useDispatch, useSelector } from 'react-redux'
+import { addToCart } from '../../features/cart/cartSlice'
+import { Scrollbars } from 'react-custom-scrollbars-2'
+import FoodGroupCheckbox from './FoodGroupCheckbox'
 
 const FoodDetail = ({ selectedFood, setSelectedFood }) => {
-  const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const [isOpen, setIsOpen] = useState(false);
-  const [count, setCount] = useState(0);
-  const [note, setNote] = useState("");
-  const [orderFoods, setOrderFoods] = useState({});
-  const foods = useSelector((state) => state.foods.foods);
+  const { t } = useTranslation()
+  const dispatch = useDispatch()
+  const [isOpen, setIsOpen] = useState(false)
+  const [count, setCount] = useState(0)
+  const [note, setNote] = useState('')
+  const [orderFoods, setOrderFoods] = useState({})
+  const [toggleChangePrice, setToggleChangePrice] = useState(false)
+  const [price, setPrice] = useState(0)
+  const foods = useSelector((state) => state.foods.foods)
 
   const getOptionsFood = (foodId) => {
-    return foods.find((food) => food.id === foodId)?.optionGroups || [];
-  };
+    return foods.find((food) => food.id === foodId)?.optionGroups || []
+  }
 
   useEffect(() => {
     if (selectedFood) {
-      setOrderFoods({});
-      setIsOpen(true);
-      setCount(selectedFood?.quantity);
-      setNote(selectedFood?.note);
+      setOrderFoods({})
+      setIsOpen(true)
+      setCount(selectedFood?.quantity)
+      setNote(selectedFood?.note)
+      setPrice(selectedFood?.price)
     }
-  }, [selectedFood]);
+  }, [selectedFood])
 
   const onCancel = () => {
-    setSelectedFood(null);
-    setCount(0);
-    setNote("");
-    setIsOpen(false);
-  };
+    setSelectedFood(null)
+    setCount(0)
+    setNote('')
+    setIsOpen(false)
+  }
 
   const onAddFoodOption = () => {
     const dataFood = {
@@ -45,11 +48,12 @@ const FoodDetail = ({ selectedFood, setSelectedFood }) => {
       newOptions: Object.values(orderFoods),
       newQuantity: count,
       note,
-    };
+      newPrice: price
+    }
 
-    dispatch(addToCart(dataFood));
-    onCancel();
-  };
+    dispatch(addToCart(dataFood))
+    onCancel()
+  }
 
   return (
     <Modal
@@ -64,20 +68,20 @@ const FoodDetail = ({ selectedFood, setSelectedFood }) => {
         {selectedFood && (
           <>
             <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row md:items-center">
-              <motion.div
-                layout
-                animate={{ opacity: 1 }}
-                initial={{ opacity: 0 }}
-                exit={{ opacity: 0 }}
+              <div
+                // layout
+                // animate={{ opacity: 1 }}
+                // initial={{ opacity: 0 }}
+                // exit={{ opacity: 0 }}
                 className={classNames(
-                  selectedFood.soldOut ? "pointer-events-none opacity-30" : "",
-                  "flex items-center justify-between py-4 pr-4"
+                  selectedFood.soldOut ? 'pointer-events-none opacity-30' : '',
+                  'flex items-center justify-between py-4 pr-4'
                 )}
                 key={selectedFood.id}
               >
                 <div
-                  className="flex flex-1 cursor-pointer items-center gap-2"
-                  onClick={() => setSelectedFood(selectedFood)}
+                  className="flex flex-1 items-center gap-2"
+                  // onClick={() => setSelectedFood(selectedFood)}
                 >
                   <img
                     src={selectedFood.image}
@@ -87,10 +91,43 @@ const FoodDetail = ({ selectedFood, setSelectedFood }) => {
                   <div>
                     <Tag color="#FF9141">{selectedFood.name.toUpperCase()}</Tag>
                     <p>{selectedFood.name}</p>
-                    <p>{formatMoney(selectedFood.price)}đ</p>
+                    {toggleChangePrice ? (
+                      <div>
+                        <InputNumber
+                          value={price}
+                          onChange={(value) => setPrice(value)}
+                          controls={false}
+                          className="mr-2 w-[120px]"
+                          placeholder="Giá tiền"
+                          formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                          min={0}
+                          max={10000001}
+                          size="small"
+                        />
+                        <Button
+                          type="primary"
+                          size="small"
+                          onClick={() => setToggleChangePrice(false)}
+                        >
+                          Lưu
+                        </Button>
+                      </div>
+                    ) : (
+                      <p>
+                        {formatMoney(price)}đ{' '}
+                        {selectedFood?.changePrice && (
+                          <span
+                            className="ml-2 cursor-pointer text-red-500 underline"
+                            onClick={() => setToggleChangePrice(true)}
+                          >
+                            Thay đổi giá
+                          </span>
+                        )}
+                      </p>
+                    )}
                   </div>
                 </div>
-              </motion.div>
+              </div>
 
               <div className="w-[100px] self-end md:self-center">
                 <ButtonChangeQuantityWithNote
@@ -111,7 +148,7 @@ const FoodDetail = ({ selectedFood, setSelectedFood }) => {
               />
             </div>
 
-            <Scrollbars style={{ height: "50vh" }}>
+            {getOptionsFood(selectedFood.id)?.length > 0 && <Scrollbars style={{ height: '50vh' }}>
               <div className="w-full space-y-4">
                 {/* Hiển thị các option chọn 1 */}
                 {getOptionsFood(selectedFood.id)
@@ -125,7 +162,7 @@ const FoodDetail = ({ selectedFood, setSelectedFood }) => {
                         orderFoods={orderFoods}
                         setOrderFoods={setOrderFoods}
                       />
-                    );
+                    )
                   })}
 
                 {/* Hiển thị các option chọn nhiều */}
@@ -140,15 +177,15 @@ const FoodDetail = ({ selectedFood, setSelectedFood }) => {
                         orderFoods={orderFoods}
                         setOrderFoods={setOrderFoods}
                       />
-                    );
+                    )
                   })}
               </div>
-            </Scrollbars>
+            </Scrollbars>}
           </>
         )}
       </div>
     </Modal>
-  );
-};
+  )
+}
 
-export default FoodDetail;
+export default FoodDetail

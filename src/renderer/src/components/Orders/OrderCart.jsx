@@ -107,7 +107,8 @@ const OrderCart = (props) => {
             {orderFoods?.map((food, index) => (
               <div
                 className={classNames(
-                  food.status === "COMPLETED" && food.needProcessing || food?.billingTime?.endTime
+                  (food.status === "COMPLETED" && food.needProcessing) ||
+                    food?.billingTime?.endTime
                     ? "pointer-events-none opacity-70"
                     : "opacity-100",
                   "py-3"
@@ -115,23 +116,29 @@ const OrderCart = (props) => {
                 key={`f-${index}`}
               >
                 <div className="flex w-full cursor-pointer flex-wrap items-center text-sm text-black1 sm:text-base">
-                  <p
-                    className={`${
+                  <div className={`${
                       index === 0 ? "text-primary" : ""
                     } w-full pr-2 hover:text-primary sm:w-2/4`}
-                    onClick={() => props.setSelectedFood(food)}
+                    onClick={() => props.setSelectedFood(food)}>
+                  <p
                   >
                     {food.name}
                   </p>
+                  {food.changePrice && <span className="text-sm text-red-500">Giá có thể thay đổi</span>}
+                  </div>
                   <div className="sm:order-0 order-1 my-1 w-1/2 pr-3 text-center sm:w-1/4 md:pr-0">
                     <ButtonChangeQuantity food={food} />
                   </div>
-                  <p className="my-1 w-1/2 whitespace-nowrap pr-4 text-left sm:order-1 sm:w-1/4 sm:text-right md:w-1/4">
-                    {formatMoney(
-                      (food.price + getTotalPrice(food.options ? food.options.flat(1) : [])) *
+                 
+                 <p className="my-1 w-1/2 whitespace-nowrap pr-4 text-left sm:order-1 sm:w-1/4 sm:text-right md:w-1/4">
+                 {food.price === 0 ? `${formatMoney(food.billingTime.pricePerTimeBlock)}đ/ ${food.billingTime.timeBlock}p` : formatMoney(
+                      (food.price +
+                        getTotalPrice(
+                          food.options ? food.options.flat(1) : []
+                        )) *
                         food.quantity
-                    )}
-                    đ
+                    ) + "đ"}
+                  
                   </p>
                 </div>
                 {food.options && food.options.length > 0 && (
@@ -154,7 +161,7 @@ const OrderCart = (props) => {
                       {getTime(food?.billingTime?.startTime)}{" "}
                       {food?.billingTime?.startTime && (
                         <Popconfirm
-                          title="Bạn có chắc chắn muốn dừng món ăn này?"
+                          title="Bạn có chắc chắn muốn dừng tính giờ món ăn này?"
                           overlayStyle={{ width: "310px" }}
                           placement="bottom"
                           okText="Xác nhận"
@@ -162,10 +169,8 @@ const OrderCart = (props) => {
                           onConfirm={() => onStopFood(food.index)}
                           okButtonProps={{ loading: isLoadingStopFood }}
                         >
-                          <span
-                            className="ml-2 inline-flex cursor-pointer items-center gap-1 text-red-500 hover:underline"
-                          >
-                            <BsStopwatch /> Dừng món
+                          <span className="ml-2 inline-flex cursor-pointer items-center gap-1 text-red-500 hover:underline">
+                            <BsStopwatch /> Dừng tính giờ
                           </span>
                         </Popconfirm>
                       )}
