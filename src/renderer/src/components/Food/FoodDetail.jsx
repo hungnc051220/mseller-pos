@@ -89,8 +89,7 @@ const FoodDetail = ({ selectedFood, setSelectedFood }) => {
                     className="h-20 w-20 rounded-xl object-cover"
                   />
                   <div>
-                    <Tag color="#FF9141">{selectedFood.name.toUpperCase()}</Tag>
-                    <p>{selectedFood.name}</p>
+                    <p className='text-lg'>{selectedFood.name}</p>
                     {toggleChangePrice ? (
                       <div>
                         <InputNumber
@@ -114,7 +113,7 @@ const FoodDetail = ({ selectedFood, setSelectedFood }) => {
                       </div>
                     ) : (
                       <p>
-                        {formatMoney(price)}đ{' '}
+                        {selectedFood.tbillingTime ? <div>{formatMoney(selectedFood.billingTime.pricePerTimeBlock)}đ/ {selectedFood.billingTime.timeBlock}p</div> : <p>{formatMoney(price)}đ</p>}
                         {selectedFood?.changePrice && (
                           <span
                             className="ml-2 cursor-pointer text-red-500 underline"

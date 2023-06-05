@@ -43,7 +43,7 @@ const ListMenu = () => {
       // if (imageFile === null) setErrorFile(true);
       //formData.append("image", imageFile);
       await axios.post(
-        `${import.meta.env.RENDERER_VITE_API_URL}/api/menu/food`,
+        `${import.meta.env.VITE_API_URL}/api/menu/food`,
         formData,
         {
           headers: {
@@ -88,7 +88,7 @@ const ListMenu = () => {
     <div>
       <div>
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-semibold">Thực đơn</h1>
+          <h1 className="text-3xl font-semibold">{t("menu")}</h1>
           {/* <input type="file" onChange={(e) => handleUpload(e)} />
           <Button onClick={onCreateMulti}>Thêm nhiều</Button> */}
           <CreateAndUpdateFood
@@ -178,7 +178,7 @@ const ListMenu = () => {
                               <Tag color="#ff0000">Hết hàng</Tag>
                             )}
                             <p>{food.name}</p>
-                            <p>{formatMoney(food.price)}đ</p>
+                            {food.tbillingTime ? <div>{formatMoney(food.billingTime.pricePerTimeBlock)}đ/ {food.billingTime.timeBlock}p</div> : <p>{formatMoney(food.price)}đ</p>}
                           </div>
                         </div>
                       </motion.div>
